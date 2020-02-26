@@ -56,11 +56,44 @@ class DeliveryController {
   }
 
   async update(req, res) {
-    // A data de início deve ser cadastrada assim que for feita a retirada do produto pelo entregador, e as retiradas só podem ser feitas entre as 08:00 e 18:00h.
+    const schema = Yup.object(req.body).shape({
+      product: Yup.string(),
+      recipient_id: Yup.number(),
+      deliveryman_id: Yup.number(),
+    });
 
-    // A data de término da entrega deve ser cadastrada quando o entregador finalizar a entrega:
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fail' });
+    }
 
-    return res.json({});
+    const { deliveryman_id, recipient_id } = req.body;
+
+    const deliverymanExists = await User.findOne({
+      where: { id: deliveryman_id },
+    });
+
+    if (!deliverymanExists) {
+      return res.status(400).json({ error: 'Deliveryman does not exists' });
+    }
+
+    const recipientExists = await Recipient.findOne({
+      where: { id: recipient_id },
+    });
+
+    if (!recipientExists) {
+      return res.status(400).json({ error: 'Recipient does not exists' });
+    }
+
+    const delivery = await Delivery.findByPk(req.params.id);
+
+    const { id, product } = await delivery.update(req.body);
+
+    return res.json({
+      id,
+      product,
+      recipient_id,
+      deliveryman_id,
+    });
   }
 
   async show(req, res) {
