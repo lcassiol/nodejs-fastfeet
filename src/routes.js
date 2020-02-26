@@ -11,6 +11,7 @@ import RecipientController from './app/controllers/RecipientController';
 import FileController from './app/controllers/FileController';
 import DeliveryManController from './app/controllers/DeliveryManController';
 import DeliveryController from './app/controllers/DeliveryController';
+import PackageController from './app/controllers/PackageController';
 
 const routes = express.Router();
 const upload = multer(multerConfig);
@@ -50,5 +51,9 @@ routes.get('/delivery/:id', DeliveryController.show);
 routes.post('/delivery', DeliveryController.store);
 routes.put('/delivery/:id', DeliveryController.update);
 routes.delete('/delivery/:id', DeliveryController.delete);
+
+// deliveryman actions
+routes.get('/deliveryman/:id/deliveries', PackageController.show);
+routes.put('/deliveryman/:id/delivery/:deliveryId', PackageController.update);
 
 export default routes;
