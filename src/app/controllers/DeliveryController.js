@@ -3,6 +3,7 @@ import User from '../models/User';
 import Recipient from '../models/Recipient';
 import File from '../models/File';
 import Delivery from '../models/Delivery';
+import Mail from '../../lib/Mail';
 
 class DeliveryController {
   async index(req, res) {
@@ -48,9 +49,37 @@ class DeliveryController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    // send an email to deliveryman
+    const { recipient_id, deliveryman_id, product } = req.body;
+
+    const recipientExist = await Recipient.findOne({
+      where: {
+        id: recipient_id,
+      },
+    });
+
+    if (!recipientExist) {
+      return res.status(400).json({ error: 'Recipient does not exist' });
+    }
+
+    const deliveryman = await User.findOne({
+      where: {
+        id: deliveryman_id,
+        deliveryman: true,
+      },
+    });
+
+    if (!deliveryman) {
+      return res.status(400).json({ error: 'Deliveryman does not exist' });
+    }
 
     const delivery = await Delivery.create(req.body);
+
+    // send an email to deliveryman
+    await Mail.sendMail({
+      to: `${deliveryman.name} <${deliveryman.email}>`,
+      subject: `Nova entrega disponivel - ${product}`,
+      text: `${product} já esta disponível para retirada`,
+    });
 
     return res.status(201).json(delivery);
   }
