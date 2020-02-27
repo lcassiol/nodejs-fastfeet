@@ -51,13 +51,13 @@ class DeliveryController {
 
     const { recipient_id, deliveryman_id, product } = req.body;
 
-    const recipientExist = await Recipient.findOne({
+    const recipient = await Recipient.findOne({
       where: {
         id: recipient_id,
       },
     });
 
-    if (!recipientExist) {
+    if (!recipient) {
       return res.status(400).json({ error: 'Recipient does not exist' });
     }
 
@@ -78,7 +78,12 @@ class DeliveryController {
     await Mail.sendMail({
       to: `${deliveryman.name} <${deliveryman.email}>`,
       subject: `Nova entrega disponivel - ${product}`,
-      text: `${product} já esta disponível para retirada`,
+      template: 'newDelivery',
+      context: {
+        deliveryman: deliveryman.name,
+        product,
+        recipient: recipient.name,
+      },
     });
 
     return res.status(201).json(delivery);
