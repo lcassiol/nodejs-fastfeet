@@ -12,6 +12,7 @@ import FileController from './app/controllers/FileController';
 import DeliveryManController from './app/controllers/DeliveryManController';
 import DeliveryController from './app/controllers/DeliveryController';
 import PackageController from './app/controllers/PackageController';
+import DeliveryProblemsController from './app/controllers/DeliveryProblemsController';
 
 const routes = express.Router();
 const upload = multer(multerConfig);
@@ -55,5 +56,17 @@ routes.delete('/delivery/:id', DeliveryController.delete);
 // deliveryman actions
 routes.get('/deliveryman/:id/deliveries', PackageController.show);
 routes.put('/deliveryman/:id/delivery/:deliveryId', PackageController.update);
+
+// delivery problems
+routes.get('/delivery-problems/', DeliveryProblemsController.index);
+routes.get('/delivery/:id/problems', DeliveryProblemsController.show);
+
+routes.delete(
+  '/problem/:id/cancel-delivery',
+  DeliveryProblemsController.delete
+);
+
+// deliveryman create delivery problem
+routes.post('/delivery/:id/problems', DeliveryProblemsController.store);
 
 export default routes;

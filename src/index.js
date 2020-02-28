@@ -32,6 +32,7 @@ class App {
     this.express.use(async (err, req, res, next) => {
       const errors = await new Youch(err, req).toJSON();
 
+      console.log(err);
       return res.status(500).json(errors);
     });
   }
