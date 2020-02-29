@@ -36,11 +36,10 @@ class DeliveryManController {
       return res.status(400).json({ error: 'User already exists. ' });
     }
 
-    if (!req.body.deliveryman) {
-      req.body.deliveryman = true;
-    }
-
-    const { id, name, email, deliveryman } = await User.create(req.body);
+    const { id, name, email, deliveryman } = await User.create({
+      ...req.body,
+      deliveryman: true,
+    });
 
     return res.status(201).json({ id, name, email, deliveryman });
   }
