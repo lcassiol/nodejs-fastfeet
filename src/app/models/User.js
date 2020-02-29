@@ -10,6 +10,7 @@ class User extends Model {
         deliveryman: Sequelize.BOOLEAN,
         password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,
+        change_password: Sequelize.BOOLEAN,
       },
       {
         sequelize,

@@ -63,6 +63,7 @@ class UserController {
       name: Yup.string(),
       email: Yup.string().email(),
       avatar_id: Yup.number(),
+      change_password: Yup.boolean(),
       oldPassword: Yup.string().min(6),
       password: Yup.string()
         .min(6)
@@ -79,7 +80,7 @@ class UserController {
     }
 
     const user = await User.findByPk(req.params.id);
-    const { email: newEmail, oldPassword } = req.body;
+    const { email: newEmail, oldPassword, password } = req.body;
 
     if (!user) {
       return res.status(400).json({ error: 'User not found' });
@@ -95,8 +96,12 @@ class UserController {
       }
     }
 
-    if (oldPassword && !(await user.validPassword(oldPassword))) {
+    if (oldPassword && !(await user.checkPassword(oldPassword))) {
       return res.status(400).json({ error: 'Password does not match' });
+    }
+
+    if (oldPassword && password) {
+      req.body.change_password = false;
     }
 
     const { id, name, email, avatar_id, deliveryman } = await user.update(
