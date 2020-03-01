@@ -1,11 +1,21 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import User from '../models/User';
 import File from '../models/File';
 
 class DeliveryManController {
   async index(req, res) {
+    const { q } = req.query;
+    const whereParameters = {
+      deliveryman: true,
+    };
+
+    if (q) {
+      whereParameters.name = { [Op.iLike]: `${q}%` };
+    }
+
     const couriers = await User.findAll({
-      where: { deliveryman: true },
+      where: whereParameters,
       attributes: ['id', 'name', 'email'],
       include: {
         model: File,
@@ -45,7 +55,7 @@ class DeliveryManController {
   }
 
   async show(req, res) {
-    const couriers = await User.findOne({
+    const deliveryman = await User.findOne({
       where: { id: req.params.id, deliveryman: true },
       attributes: ['id', 'name', 'email'],
       include: {
@@ -55,7 +65,7 @@ class DeliveryManController {
       },
     });
 
-    return res.json(couriers);
+    return res.json(deliveryman);
   }
 
   async delete(req, res) {

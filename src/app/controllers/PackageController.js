@@ -18,7 +18,7 @@ import Recipient from '../models/Recipient';
 class PackageController {
   async show(req, res) {
     const userId = req.params.id;
-    const { finished } = req.query;
+    const { finished, q } = req.query;
     const whereParameters = {
       deliveryman_id: userId,
     };
@@ -28,6 +28,10 @@ class PackageController {
     } else {
       whereParameters.canceled_at = null;
       whereParameters.signature_id = null;
+    }
+
+    if (q) {
+      whereParameters.product = { [Op.iLike]: `${q}%` };
     }
 
     const userExist = await User.findOne({

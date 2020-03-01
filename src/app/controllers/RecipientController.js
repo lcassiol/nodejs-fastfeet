@@ -1,8 +1,17 @@
+import { Op } from 'sequelize';
 import Recipient from '../models/Recipient';
 
 class RecipientController {
   async show(req, res) {
+    const { q } = req.query;
+    const whereParameters = {};
+
+    if (q) {
+      whereParameters.name = { [Op.iLike]: `${q}%` };
+    }
+
     const recipients = await Recipient.findAll({
+      where: whereParameters,
       attributes: { exclude: ['createdAt', 'updatedAt'] },
     });
 
