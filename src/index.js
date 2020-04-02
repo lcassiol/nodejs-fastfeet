@@ -1,5 +1,6 @@
 import express from 'express';
 import 'express-async-errors';
+import cors from 'cors';
 
 import path from 'path';
 import Youch from 'youch';
@@ -18,6 +19,7 @@ class App {
 
   middlewares() {
     this.express.use(express.json());
+    this.express.use(cors());
     this.express.use(
       '/files',
       express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
