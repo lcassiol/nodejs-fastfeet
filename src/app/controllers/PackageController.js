@@ -11,16 +11,17 @@ import {
   isWithinInterval,
   isValid,
 } from 'date-fns';
-import User from '../models/User';
+
+import Deliveryman from '../models/Deliveryman';
 import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
 
 class PackageController {
   async show(req, res) {
-    const userId = req.params.id;
+    const deliverymanId = req.params.id;
     const { finished, q } = req.query;
     const whereParameters = {
-      deliveryman_id: userId,
+      deliveryman_id: deliverymanId,
     };
 
     if (finished.toLowerCase() === 'true') {
@@ -34,12 +35,12 @@ class PackageController {
       whereParameters.product = { [Op.iLike]: `${q}%` };
     }
 
-    const userExist = await User.findOne({
-      where: { id: userId, deliveryman: true },
+    const deliverymanExist = await Deliveryman.findOne({
+      where: { id: deliverymanId },
     });
 
-    if (!userExist) {
-      return res.status(400).json({ error: 'User does not exist' });
+    if (!deliverymanExist) {
+      return res.status(400).json({ error: 'Deliveryman does not exist' });
     }
 
     const deliveries = await Delivery.findAll({
@@ -68,12 +69,12 @@ class PackageController {
       return res.status(400).json({ error: 'Validation fail' });
     }
 
-    const userId = parseInt(req.params.id, 10);
+    const deliverymanId = parseInt(req.params.id, 10);
     const deliveryId = parseInt(req.params.deliveryId, 10);
     const signatureId = req.body.signature_id;
 
-    const userExist = await User.findOne({
-      where: { id: userId, deliveryman: true },
+    const userExist = await Deliveryman.findOne({
+      where: { id: deliverymanId },
     });
 
     if (!userExist) {
@@ -88,7 +89,7 @@ class PackageController {
       return res.status(400).json({ error: 'Delivery does not exist' });
     }
 
-    if (delivery.deliveryman_id !== userId) {
+    if (delivery.deliveryman_id !== deliverymanId) {
       return res
         .status(400)
         .json({ error: 'This user are not assign to this delivery' });
@@ -138,7 +139,7 @@ class PackageController {
         start_date: {
           [Op.between]: [startOfDay(new Date()), endOfDay(new Date())],
         },
-        deliveryman_id: userId,
+        deliveryman_id: deliverymanId,
       },
     });
 

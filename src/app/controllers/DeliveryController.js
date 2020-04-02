@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import User from '../models/User';
+import Deliveryman from '../models/Deliveryman';
 import Recipient from '../models/Recipient';
 import File from '../models/File';
 import Delivery from '../models/Delivery';
@@ -22,7 +22,7 @@ class DeliveryController {
           attributes: { exclude: ['createdAt', 'updatedAt'] },
         },
         {
-          model: User,
+          model: Deliveryman,
           as: 'deliveryman',
           attributes: ['id', 'name', 'email'],
           include: [
@@ -62,10 +62,9 @@ class DeliveryController {
       return res.status(400).json({ error: 'Recipient does not exist' });
     }
 
-    const deliveryman = await User.findOne({
+    const deliveryman = await Deliveryman.findOne({
       where: {
         id: deliveryman_id,
-        deliveryman: true,
       },
     });
 
@@ -95,7 +94,7 @@ class DeliveryController {
 
     const { deliveryman_id, recipient_id } = req.body;
 
-    const deliverymanExists = await User.findOne({
+    const deliverymanExists = await Deliveryman.findOne({
       where: { id: deliveryman_id },
     });
 
@@ -139,7 +138,7 @@ class DeliveryController {
           attributes: { exclude: ['createdAt', 'updatedAt'] },
         },
         {
-          model: User,
+          model: Deliveryman,
           as: 'deliveryman',
           attributes: ['id', 'name', 'email'],
           include: [

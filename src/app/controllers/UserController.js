@@ -80,7 +80,7 @@ class UserController {
     }
 
     const user = await User.findByPk(req.params.id);
-    const { email: newEmail, oldPassword, password } = req.body;
+    const { email: newEmail, oldPassword } = req.body;
 
     if (!user) {
       return res.status(400).json({ error: 'User not found' });
@@ -100,14 +100,8 @@ class UserController {
       return res.status(400).json({ error: 'Password does not match' });
     }
 
-    if (oldPassword && password) {
-      req.body.change_password = false;
-    }
-
-    const { id, name, email, avatar_id, deliveryman } = await user.update(
-      req.body
-    );
-    return res.json({ id, name, email, avatar_id, deliveryman });
+    const { id, name, email, avatar_id } = await user.update(req.body);
+    return res.json({ id, name, email, avatar_id });
   }
 
   async delete(req, res) {
