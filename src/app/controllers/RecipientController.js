@@ -3,6 +3,7 @@ import Recipient from '../models/Recipient';
 
 class RecipientController {
   async show(req, res) {
+    const { page = 1 } = req.query;
     const { q } = req.query;
     const whereParameters = {};
 
@@ -11,6 +12,8 @@ class RecipientController {
     }
 
     const recipients = await Recipient.findAll({
+      limit: 5,
+      offset: (page - 1) * 5,
       where: whereParameters,
       attributes: { exclude: ['createdAt', 'updatedAt'] },
     });

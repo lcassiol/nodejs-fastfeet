@@ -8,7 +8,11 @@ import NewDeliveryMail from '../jobs/NewDeliveryMail';
 
 class DeliveryController {
   async index(req, res) {
+    const { page = 1 } = req.query;
+
     const deliveries = await Delivery.findAll({
+      limit: 5,
+      offset: (page - 1) * 5,
       attributes: { exclude: ['signature_id', 'createdAt', 'updatedAt'] },
       include: [
         {

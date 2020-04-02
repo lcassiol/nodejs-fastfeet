@@ -5,6 +5,7 @@ import File from '../models/File';
 
 class DeliveryManController {
   async index(req, res) {
+    const { page = 1 } = req.query;
     const { q } = req.query;
     const whereParameter = {};
 
@@ -15,6 +16,8 @@ class DeliveryManController {
     }
 
     const couriers = await Deliveryman.findAll({
+      limit: 5,
+      offset: (page - 1) * 5,
       where: whereParameter,
       attributes: ['id', 'name', 'email'],
       include: {

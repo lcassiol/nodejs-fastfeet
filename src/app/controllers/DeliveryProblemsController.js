@@ -8,7 +8,10 @@ import CancellationMail from '../jobs/CancellationMail';
 
 class DeliveryProblemsController {
   async index(req, res) {
+    const { page = 1 } = req.query;
     const deliveryProblems = await DeliveryProblems.findAll({
+      limit: 5,
+      offset: (page - 1) * 5,
       attributes: ['id', 'description'],
       include: [
         {
