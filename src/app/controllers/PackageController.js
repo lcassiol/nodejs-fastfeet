@@ -65,6 +65,10 @@ class PackageController {
       signature_id: Yup.number(),
     });
 
+    console.log('DATAAAa');
+    console.log(new Date());
+    console.log(req.body.start_date);
+
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fail' });
     }
@@ -126,12 +130,17 @@ class PackageController {
           error: 'Orders pickup are allowed between 08:00h until 18:00h',
         });
       }
+
+      req.body = { ...req.body, status: 'RETIRADA' };
     }
 
     if (isValid(endDate) && !signatureId) {
       return res.status(400).json({
         error: 'To finish order you need put a picture of recipient signature',
       });
+    }
+    if (isValid(endDate) && signatureId) {
+      req.body = { ...req.body, status: 'ENTREGUE' };
     }
 
     const ordersPickupToday = await Delivery.findAll({

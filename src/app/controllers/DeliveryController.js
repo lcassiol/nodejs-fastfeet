@@ -76,7 +76,7 @@ class DeliveryController {
       return res.status(400).json({ error: 'Deliveryman does not exist' });
     }
 
-    const delivery = await Delivery.create(req.body);
+    const delivery = await Delivery.create({ ...req.body, status: 'PENDENTE' });
 
     // send an email to deliveryman
 

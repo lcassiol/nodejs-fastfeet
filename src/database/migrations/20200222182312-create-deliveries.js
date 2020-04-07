@@ -32,6 +32,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      status: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       canceled_at: {
         type: Sequelize.DATE,
         allowNull: true,

@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import Delivery from '../models/Delivery';
 import DeliveryProblems from '../models/DeliveryProblems';
 import Recipient from '../models/Recipient';
-import User from '../models/User';
+import Deliveryman from '../models/Deliveryman';
 import Queue from '../../lib/Queue';
 import CancellationMail from '../jobs/CancellationMail';
 
@@ -97,7 +97,7 @@ class DeliveryProblemsController {
           attributes: ['name'],
         },
         {
-          model: User,
+          model: Deliveryman,
           as: 'deliveryman',
           attributes: ['id', 'name', 'email'],
         },
@@ -110,6 +110,7 @@ class DeliveryProblemsController {
 
     await delivery.update({
       canceled_at: new Date(),
+      status: 'CANCELADA',
     });
 
     const { product, recipient, deliveryman } = delivery;
