@@ -18,7 +18,7 @@ class DeliveryController {
         {
           model: File,
           as: 'signature',
-          attributes: ['id', 'url', 'name'],
+          attributes: ['id', 'url', 'name', 'path'],
         },
         {
           model: Recipient,
@@ -33,7 +33,7 @@ class DeliveryController {
             {
               model: File,
               as: 'avatar',
-              attributes: ['id', 'url', 'name'],
+              attributes: ['id', 'url', 'name', 'path'],
             },
           ],
         },
