@@ -63,7 +63,7 @@ class DeliveryManController {
       include: {
         model: File,
         as: 'avatar',
-        attributes: ['id', 'url', 'name'],
+        attributes: ['id', 'url', 'name', 'path'],
       },
     });
 
