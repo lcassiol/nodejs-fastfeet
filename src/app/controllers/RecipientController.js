@@ -2,7 +2,7 @@ import { Op } from 'sequelize';
 import Recipient from '../models/Recipient';
 
 class RecipientController {
-  async show(req, res) {
+  async index(req, res) {
     const { page = 1 } = req.query;
     const { q } = req.query;
     const whereParameters = {};
@@ -19,6 +19,16 @@ class RecipientController {
     });
 
     return res.json(recipients);
+  }
+
+  async show(req, res) {
+    const recipient = await Recipient.findByPk(req.params.id);
+
+    if (!recipient) {
+      return res.status(400).json({ error: 'Recipient doest not exist.' });
+    }
+
+    return res.json(recipient);
   }
 
   async store(req, res) {
