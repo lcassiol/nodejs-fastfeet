@@ -59,7 +59,7 @@ class DeliveryManController {
   async show(req, res) {
     const deliveryman = await Deliveryman.findOne({
       where: { id: req.params.id },
-      attributes: ['id', 'name', 'email'],
+      attributes: ['id', 'name', 'email', 'created_at'],
       include: {
         model: File,
         as: 'avatar',

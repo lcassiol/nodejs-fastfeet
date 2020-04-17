@@ -23,6 +23,21 @@ routes.get('/', async (req, res) => {
 
 routes.post('/session', SessionController.store);
 
+// deliveryman login
+routes.get('/deliveryman/:id', DeliveryManController.show);
+
+// deliveryman actions
+routes.get('/deliveryman/:id/deliveries', PackageController.show);
+routes.put('/deliveryman/:id/delivery/:deliveryId', PackageController.update);
+
+// deliveryman create delivery problem
+routes.post('/delivery/:id/problems', DeliveryProblemsController.store);
+// list delivery problem
+routes.get('/delivery/:id/problems', DeliveryProblemsController.show);
+
+// upload de imagem
+routes.post('/files', upload.single('file'), FileController.store);
+
 // Apply authMiddleware
 routes.use(authMiddleware);
 
@@ -38,12 +53,9 @@ routes.post('/recipients', RecipientController.store);
 routes.put('/recipients/:id', RecipientController.update);
 routes.delete('/recipients/:id', RecipientController.delete);
 
-// upload de imagem
-routes.post('/files', upload.single('file'), FileController.store);
-
 // deliveryman
 routes.get('/deliveryman', DeliveryManController.index);
-routes.get('/deliveryman/:id', DeliveryManController.show);
+
 routes.post('/deliveryman', DeliveryManController.store);
 routes.put('/deliveryman/:id', DeliveryManController.update);
 routes.delete('/deliveryman/:id', DeliveryManController.delete);
@@ -55,20 +67,12 @@ routes.post('/delivery', DeliveryController.store);
 routes.put('/delivery/:id', DeliveryController.update);
 routes.delete('/delivery/:id', DeliveryController.delete);
 
-// deliveryman actions
-routes.get('/deliveryman/:id/deliveries', PackageController.show);
-routes.put('/deliveryman/:id/delivery/:deliveryId', PackageController.update);
-
 // delivery problems
 routes.get('/delivery-problems/', DeliveryProblemsController.index);
-routes.get('/delivery/:id/problems', DeliveryProblemsController.show);
 
 routes.delete(
   '/problem/:id/cancel-delivery',
   DeliveryProblemsController.delete
 );
-
-// deliveryman create delivery problem
-routes.post('/delivery/:id/problems', DeliveryProblemsController.store);
 
 export default routes;

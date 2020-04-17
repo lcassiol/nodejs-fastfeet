@@ -2,6 +2,7 @@ import { Op } from 'sequelize';
 import * as Yup from 'yup';
 import {
   isBefore,
+  subMinutes,
   parseISO,
   setSeconds,
   setMinutes,
@@ -19,7 +20,7 @@ import Recipient from '../models/Recipient';
 class PackageController {
   async show(req, res) {
     const deliverymanId = req.params.id;
-    const { finished, q } = req.query;
+    const { finished, q, page = 1 } = req.query;
     const whereParameters = {
       deliveryman_id: deliverymanId,
     };
@@ -44,7 +45,9 @@ class PackageController {
     }
 
     const deliveries = await Delivery.findAll({
-      attributes: { exclude: ['signature_id', 'createdAt', 'updatedAt'] },
+      limit: 5,
+      offset: (page - 1) * 5,
+      attributes: { exclude: ['signature_id', 'updatedAt'] },
       include: [
         {
           model: Recipient,
@@ -53,6 +56,7 @@ class PackageController {
         },
       ],
       where: whereParameters,
+      order: [['createdAt', 'ASC']],
     });
 
     return res.json(deliveries);
@@ -99,7 +103,7 @@ class PackageController {
     const endDate = parseISO(req.body.end_date);
 
     if (isValid(startDate)) {
-      if (isBefore(startDate, new Date())) {
+      if (isBefore(startDate, subMinutes(new Date(), 2))) {
         return res.status(400).json({ error: 'Past dates are not allowed' });
       }
 
@@ -149,16 +153,20 @@ class PackageController {
     });
 
     if (ordersPickupToday.length < 5) {
-      const data = await delivery.update(req.body, {
-        attributes: [
-          'id',
-          'product',
-          'recipient_id',
-          'canceled_at',
-          'start_date',
-          'end_date',
-          'signature_id',
+      await delivery.update(req.body);
+
+      const data = await Delivery.findOne({
+        attributes: { exclude: ['signature_id', 'updatedAt'] },
+        include: [
+          {
+            model: Recipient,
+            as: 'recipient',
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+          },
         ],
+        where: {
+          id: deliveryId,
+        },
       });
 
       return res.json(data);

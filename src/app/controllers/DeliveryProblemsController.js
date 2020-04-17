@@ -12,7 +12,7 @@ class DeliveryProblemsController {
     const deliveryProblems = await DeliveryProblems.findAll({
       limit: 5,
       offset: (page - 1) * 5,
-      attributes: ['id', 'description'],
+      attributes: ['id', 'description', 'createdAt'],
       include: [
         {
           model: Delivery,
@@ -23,6 +23,7 @@ class DeliveryProblemsController {
           },
         },
       ],
+      order: [['createdAt', 'ASC']],
     });
 
     return res.json(deliveryProblems);
@@ -34,7 +35,7 @@ class DeliveryProblemsController {
       where: {
         delivery_id: id,
       },
-      attributes: ['id', 'description'],
+      attributes: ['id', 'description', 'createdAt'],
       include: [
         {
           model: Delivery,
