@@ -13,7 +13,9 @@ Este projeto faz parte do desafio final do curso GoStack da Rocketseat
 `yarn sequelize db:seed:all`
 
 - Usuario admin: 
+
 login: `admin@fastfeet.com`
+
 password: `123456`
 
 
