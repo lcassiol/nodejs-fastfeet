@@ -25,9 +25,7 @@ e o aplicativo apenas para os entregadores com a possibilidade do entregador:
 
 `docker run --name nome-dainstancia -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres`
 
-- Depois deste comando o postgres ja vai estar rodando, é necessario criar o schema do banco, recomendo a utilização do DBeaver
-
-`https://dbeaver.io`
+- Depois deste comando o postgres ja vai estar rodando, é necessario criar o schema do banco, recomendo a utilização do DBeaverv  https://dbeaver.io
 
 - Em seguida necessário rodar as migrações, para isso rode o comando
 `yarn sequelize db:migrate`
