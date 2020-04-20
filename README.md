@@ -17,10 +17,11 @@ e o aplicativo apenas para os entregadores com a possibilidade do entregador:
 - **Finalizar a entrega sendo obrigado a tirar uma foto da confirmação da entrega (uma assinatura do cliente neste caso)**
 
 
--- Após o download dar o comando `yarn` para instalar as dependências do projeto e em seguida
+-------------------------------------
+-> Após o download dar o comando `yarn` para instalar as dependências do projeto e em seguida
 
 
--- Sugestão para rodar localmente sem precisar baixar o sgbd utilizar o docker, no meu caso utilizei o postgres usei este comando:
+-> Sugestão para rodar localmente sem precisar baixar o sgbd utilizar o docker, no meu caso utilizei o postgres usei este comando:
 
 `docker run --name nome-dainstancia -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres`
 
@@ -36,22 +37,18 @@ e o aplicativo apenas para os entregadores com a possibilidade do entregador:
 
 - Usuario admin: 
 
-login: `admin@fastfeet.com`
-
+login: `admin@fastfeet.com`<br>
 password: `123456`
 
-
- Para rodar a aplicação - `yarn dev`
+**Para rodar a aplicação - `yarn dev`**
 
 
 --------------------
 
-### Frontend da aplicação em Reactjs
-
+### Frontend da aplicação em Reactjs <br>
 https://github.com/lcassiol/reactjs-fastfeet
 
-### Mobile React-native
-
+### Mobile React-native <br>
 https://github.com/lcassiol/RN-fastfeet
 
 
